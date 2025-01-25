@@ -97,6 +97,9 @@ class Helper
 
     public static function getSubscribeUrl($token)
     {
+        $strs = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm';
+        $randstr = substr(str_shuffle($strs), 0, rand(4,8));
+
         $path = config('v2board.subscribe_path', '/api/v1/client/subscribe');
         if (empty($path)) {
             $path = '/api/v1/client/subscribe';
@@ -104,6 +107,13 @@ class Helper
         $path = "{$path}?token={$token}";
         $subscribeUrls = explode(',', config('v2board.subscribe_url'));
         $subscribeUrl = $subscribeUrls[rand(0, count($subscribeUrls) - 1)];
+        if (strpos($subscribeUrl, '{uuid}') !== false) {
+            $user = User::where('token', $token)->first();
+            $subscribeUrl = str_replace('{uuid}', $user->uuid, $subscribeUrl);
+
+        } else if (strpos($subscribeUrl, "*") !== false) {
+            $subscribeUrl = str_replace("*", $randstr, $subscribeUrl);
+        }
         if ($subscribeUrl) return $subscribeUrl . $path;
         return url($path);
     }
