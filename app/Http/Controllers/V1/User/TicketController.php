@@ -256,6 +256,7 @@ class TicketController extends Controller
 				$remaining_traffic = $this->getFlowData($user->transfer_enable - $user->u - $user->d); // 剩余流量
 				$u = $this->getFlowData($user->u); // 上传
 				$d = $this->getFlowData($user->d); // 下载
+                $TGid = $user->telegram_id ?? "NULL"; // telegram ID
 				$expired_at = date("Y-m-d h:m:s", $user->expired_at); // 到期时间
 				if (isset($_SERVER['HTTP_X_REAL_IP'])) {
 				$ip_address = $_SERVER['HTTP_X_REAL_IP'];
@@ -279,7 +280,7 @@ class TicketController extends Controller
 				
 				$money = $user->balance / 100;
 				$affmoney = $user->commission_balance / 100;
-				$telegramService->sendMessageWithAdmin("📮工单提醒 #{$ticket->id}\n———————————————\n邮箱：\n`{$user->email}`\n用户位置：\n`{$location}`\nIP:\n{$ip_address}\n套餐与流量：\n`{$planName} of {$transfer_enable}/{$remaining_traffic}`\n上传/下载：\n`{$u}/{$d}`\n到期时间：\n`{$expired_at}`\n余额/佣金余额：\n`{$money}/{$affmoney}`\n主题：\n`{$ticket->subject}`\n内容：\n`{$message}`", true);
+				$telegramService->sendMessageWithAdmin("📮工单提醒 #{$ticket->id}\n———————————————\n邮箱：\n`{$user->email}`\n用户位置：\n`{$location}`\nIP:\n{$ip_address}\ntelegram id: `{$TGid}`\n套餐与流量：\n`{$planName} of {$transfer_enable}/{$remaining_traffic}`\n上传/下载：\n`{$u}/{$d}`\n到期时间：\n`{$expired_at}`\n余额/佣金余额：\n`{$money}/{$affmoney}`\n主题：\n`{$ticket->subject}`\n内容：\n`{$message}`", true);
 			} else {
 				// Handle case where user data is not found
 				$telegramService->sendMessageWithAdmin("User data not found for user ID: {$userid}", true);
