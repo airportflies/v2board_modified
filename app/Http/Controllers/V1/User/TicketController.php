@@ -100,7 +100,7 @@ class TicketController extends Controller
                 $auto_message = "[自动回复] 请提供订单号 等待客服回复.";
                 
             } elseif (preg_match("/解绑tg/", $ticket_text)) {
-                $user = User::find($request->user['id'])->load('plan');
+                $user = User::find($request->user['id']);
                 $user->telegram_id = NULL;
                 if (!$user->save()) {
                     throw new ApiException('解绑失败');
