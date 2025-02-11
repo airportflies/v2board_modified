@@ -101,6 +101,7 @@ class Singbox
         $array['server_port'] = $server['port'];
         $array['method'] = $server['cipher'];
         $array['password'] = $password;
+        $array['domain_resolver'] = 'local';
 
         return $array;
     }
@@ -117,6 +118,7 @@ class Singbox
         $array['security'] = 'auto';
         $array['alter_id'] = 0;
         $array['transport']= [];
+        $array['domain_resolver'] = 'local';
 
         if ($server['tls']) {
             $tlsConfig = [];
@@ -163,6 +165,7 @@ class Singbox
             "server" => $server['host'],
             "server_port" => $server['port'],
             "uuid" => $password,
+            "domain_resolver" => "local",
             "packet_encoding" => "xudp"
         ];
 
@@ -227,6 +230,7 @@ class Singbox
         $array['server'] = $server['host'];
         $array['server_port'] = $server['port'];
         $array['password'] = $password;
+        $array['domain_resolver'] = 'local';
 
         $array['tls'] = [
             'enabled' => true,
@@ -268,8 +272,10 @@ class Singbox
         }
 
         $array = [
+            'tag' => $server['name'],
             'server' => $server['host'],
             'server_port' => (int)$firstPort,
+            'domain_resolver' => 'local',
             'tls' => [
                 'enabled' => true,
                 'insecure' => $server['insecure'] ? true : false,
@@ -279,7 +285,6 @@ class Singbox
 
         if (is_null($server['version']) || $server['version'] == 1) {
             $array['auth_str'] = $password;
-            $array['tag'] = $server['name'];
             $array['type'] = 'hysteria';
             $array['up_mbps'] = $user->speed_limit ? min($server['down_mbps'], $user->speed_limit) : $server['down_mbps'];
             $array['down_mbps'] = $user->speed_limit ? min($server['up_mbps'], $user->speed_limit) : $server['up_mbps'];
@@ -291,7 +296,6 @@ class Singbox
 
         } elseif ($server['version'] == 2) {
             $array['password'] = $password;
-            $array['tag'] = $server['name'];
             $array['type'] = 'hysteria2';
             $array['password'] = $password;
 
