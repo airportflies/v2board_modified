@@ -262,7 +262,6 @@ class TicketController extends Controller
 				$ip_address = $_SERVER['HTTP_X_REAL_IP'];
                 } elseif (isset($_SERVER['CF-Connecting-IP'])) {
 					$ip_address = explode(',', $_SERVER['CF-Connecting-IP'])[0];
-				}
 				} elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 					$ip_address = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
 				} else {
