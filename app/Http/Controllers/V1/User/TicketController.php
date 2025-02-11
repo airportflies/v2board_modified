@@ -260,6 +260,9 @@ class TicketController extends Controller
 				$expired_at = date("Y-m-d h:m:s", $user->expired_at); // 到期时间
 				if (isset($_SERVER['HTTP_X_REAL_IP'])) {
 				$ip_address = $_SERVER['HTTP_X_REAL_IP'];
+                } elseif (isset($_SERVER['CF-Connecting-IP'])) {
+					$ip_address = explode(',', $_SERVER['CF-Connecting-IP'])[0];
+				}
 				} elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 					$ip_address = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
 				} else {
