@@ -52,6 +52,19 @@ class PaymentController extends Controller
           $order->trade_no
         );
         $telegramService->sendMessageWithAdmin($message);
+        $url = env('ORDER_REPORTURL', 'http://127.0.0.1:29991/order');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url); // 设置请求的 URL
+        curl_setopt($ch, CURLOPT_POST, true); // 设置为 POST 请求
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $message); // 设置 POST 数据
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false); // 不需要返回响应内容
+        curl_setopt($ch, CURLOPT_HEADER, false); // 不需要返回头信息
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1); // 设置连接超时时间为 1 秒
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1); // 设置请求超时时间为 1 秒
+        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true); // 强制使用新连接
+        curl_setopt($ch, CURLOPT_FORBID_REUSE, true); 
+        curl_exec($ch);
+        curl_close($ch);
         return true;
     }
 }
